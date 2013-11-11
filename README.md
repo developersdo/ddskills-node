@@ -4,5 +4,6 @@ A minimalist Node.js wrapper for the [Dominican Developers Skills][ddskills] dat
 
 ## Todo
 
-- [ ] Add getters for Category, Skill & Developer endpoints.
+- [x] Add getters for Category, Skill & Developer endpoints.
 - [ ] Add pagination support.
+- [ ] Unit testing.
