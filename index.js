@@ -59,40 +59,39 @@ function _getJSON(url, fn) {
     });
 }
 
-// TODO:
-//
-// Refactor getter methods.
-// Use closures to abstract the 'changing' parts.
+/**
+ * Generates a model getter function based on the name of the model.
+ * @private
+ *
+ * @param {String} model Name of the model you'd like to return.
+ *                       Should be the same as URI for the model.
+ * @return getModel A model getter function.
+ */
+function _getModelGenerator(model) {
+    return function (fn) {
+        var url = API_URL + '/' + model + '.json';
+
+        _getJSON(url, fn);
+    };
+}
 
 /**
  * Returns an array with all the categories available.
  * @param  {Function} fn Callback
  */
-function getCategories(fn) {
-    var url = API_URL + '/category' + '.json';
-
-    _getJSON(url, fn);
-}
-
-/**
- * Returns an array with all the skills available.
- * @param  {Function} fn Callback
- */
-function getSkills(fn) {
-    var url = API_URL + '/skill' + '.json';
-
-    _getJSON(url, fn);
-}
+var getCategories = _getModelGenerator('category');
 
 /**
  * Returns an array with all the developers available.
  * @param  {Function} fn Callback
  */
-function getDevelopers(fn) {
-    var url = API_URL + '/developer' + '.json';
+var getDevelopers = _getModelGenerator('developer');
 
-    _getJSON(url, fn);
-}
+/**
+ * Returns an array with all the skills available.
+ * @param  {Function} fn Callback
+ */
+var getSkills = _getModelGenerator('skill');
 
 module.exports = {
     getCategories: getCategories,
