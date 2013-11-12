@@ -67,6 +67,8 @@ function _getJSON(url, fn) {
  *                       Should be the same as URI for the model.
  * @return getModel A model getter function.
  */
+// TODO: Refactor this so urls may be passed as well.
+// Maybe rename it to "_getEndpointGenerator"
 function _getModelGenerator(model) {
     return function (fn) {
         var url = API_URL + '/' + model + '.json';
@@ -93,8 +95,35 @@ var getDevelopers = _getModelGenerator('developer');
  */
 var getSkills = _getModelGenerator('skill');
 
+/**
+ * Generaters a model getter function that filters by id.
+ *
+ * @param model
+ * @return
+ */
+// TODO: Document this.
+function _getModelByIdGenerator(model) {
+    return function (id, fn) {
+        // TODO: Find a clever way to do this.
+        model = model + '/id/' + id;
+        return _getModelGenerator(model)(fn);
+    };
+}
+
+// TODO: Document this.
+var getCategoryById = _getModelByIdGenerator('category');
+
+// TODO: Document this.
+var getDeveloperById = _getModelByIdGenerator('developer');
+
+// TODO: Document this.
+var getSkillById = _getModelByIdGenerator('skill');
+
 module.exports = {
     getCategories: getCategories,
     getSkills: getSkills,
-    getDevelopers: getDevelopers
+    getDevelopers: getDevelopers,
+    getCategoryById: getCategoryById,
+    getDeveloperById: getDeveloperById,
+    getSkillById: getSkillById
 };
