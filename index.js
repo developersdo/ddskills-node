@@ -81,11 +81,7 @@ function getCategories(fn) {
 function getSkills(fn) {
     var url = API_URL + '/skill' + '.json';
 
-    // _getJSON(url, fn);
-
-    var err = new Error('Method not supported by API.');
-
-    fn(err, null);
+    _getJSON(url, fn);
 }
 
 /**
