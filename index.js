@@ -48,8 +48,6 @@ function _getJSON(url, fn) {
         }
 
         try {
-            console.log(url);
-
             var json = JSON.parse(result);
 
             fn(null, json);
@@ -116,7 +114,7 @@ function _getModelByIdGenerator(endpoint) {
     return function (id, fn) {
         // TODO: Find a clever way to do this.
         endpoint = endpoint + '/id/' + id;
-        return _getModelGenerator(endpoint)(fn);
+        _getModelGenerator(endpoint)(fn);
     };
 }
 
@@ -146,7 +144,7 @@ function _getPagedModelGenerator(endpoint) {
     return function (pageNumber, fn) {
         endpoint = endpoint + '/page/' + pageNumber;
 
-        return _getModelGenerator(endpoint)(fn);
+        _getModelGenerator(endpoint)(fn);
     };
 }
 
