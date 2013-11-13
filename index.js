@@ -141,11 +141,32 @@ var getDeveloperById = _getModelByIdGenerator('developer');
  */
 var getSkillById = _getModelByIdGenerator('skill');
 
+// TODO: Document this.
+function _getPagedModelGenerator(endpoint) {
+    return function (pageNumber, fn) {
+        endpoint = endpoint + '/page/' + pageNumber;
+
+        return _getModelGenerator(endpoint)(fn);
+    };
+}
+
+// TODO: Document this.
+var getCategoriesInPage = _getPagedModelGenerator('category');
+
+// TODO: Document this.
+var getDevelopersInPage = _getPagedModelGenerator('developer');
+
+// TODO: Document this.
+var getSkillsInPage = _getPagedModelGenerator('skill');
+
 module.exports = {
     getCategories: getCategories,
     getSkills: getSkills,
     getDevelopers: getDevelopers,
     getCategoryById: getCategoryById,
     getDeveloperById: getDeveloperById,
-    getSkillById: getSkillById
+    getSkillById: getSkillById,
+    getCategoriesInPage: getCategoriesInPage,
+    getDevelopersInPage: getDevelopersInPage,
+    getSkillsInPage: getSkillsInPage
 };
