@@ -27,6 +27,7 @@ function _get(url, fn) {
         });
 
         res.on('end', function () {
+            // FIXME: 40x and 50x response status codes should be accounted as errors.
             fn(null, buff);
         });
     });
@@ -47,6 +48,8 @@ function _getJSON(url, fn) {
         }
 
         try {
+            console.log(url);
+
             var json = JSON.parse(result);
 
             fn(null, json);
@@ -60,18 +63,27 @@ function _getJSON(url, fn) {
 }
 
 /**
+ * Returns the API URL for the specified enpoint.
+ * @private
+ * @param  {String} endpoint Name of the entity to get URL for.
+ * @return {String}          URL to the specified endpoint.
+ */
+function _resolveURL(endpoint) {
+    var url = API_URL + '/' + endpoint + '.json';
+
+    return url;
+}
+
+/**
  * Generates a model getter function based on the name of the model.
  * @private
- *
- * @param {String} model Name of the model you'd like to return.
- *                       Should be the same as URI for the model.
- * @return getModel A model getter function.
+ * @param {String} endpoint Name of the model you'd like to return.
+ *                          Should be the same as URI for the model.
+ * @return {Function} getModel A model getter function.
  */
-// TODO: Refactor this so urls may be passed as well.
-// Maybe rename it to "_getEndpointGenerator"
-function _getModelGenerator(model) {
+function _getModelGenerator(endpoint) {
     return function (fn) {
-        var url = API_URL + '/' + model + '.json';
+        var url = _resolveURL(endpoint);
 
         _getJSON(url, fn);
     };
@@ -79,44 +91,54 @@ function _getModelGenerator(model) {
 
 /**
  * Returns an array with all the categories available.
- * @param  {Function} fn Callback
+ * @param {Function} fn Callback
  */
 var getCategories = _getModelGenerator('category');
 
 /**
  * Returns an array with all the developers available.
- * @param  {Function} fn Callback
+ * @param {Function} fn Callback
  */
 var getDevelopers = _getModelGenerator('developer');
 
 /**
  * Returns an array with all the skills available.
- * @param  {Function} fn Callback
+ * @param {Function} fn Callback
  */
 var getSkills = _getModelGenerator('skill');
 
 /**
  * Generaters a model getter function that filters by id.
- *
- * @param model
- * @return
+ * @param {String} endpoint Name of the model you'd like to return.
+ * @return {Function} getModelById A model getter function that filters by id.
  */
-// TODO: Document this.
-function _getModelByIdGenerator(model) {
+function _getModelByIdGenerator(endpoint) {
     return function (id, fn) {
         // TODO: Find a clever way to do this.
-        model = model + '/id/' + id;
-        return _getModelGenerator(model)(fn);
+        endpoint = endpoint + '/id/' + id;
+        return _getModelGenerator(endpoint)(fn);
     };
 }
 
-// TODO: Document this.
+/**
+ * Returns a single category by id.
+ * @param {Number} id Unique integer that identifies a category.
+ * @param {Function} fn Callback
+ */
 var getCategoryById = _getModelByIdGenerator('category');
 
-// TODO: Document this.
+/**
+ * Returns a single developer by id.
+ * @param {Number} id Unique integer that identifies a developer.
+ * @param {Function} fn Callback
+ */
 var getDeveloperById = _getModelByIdGenerator('developer');
 
-// TODO: Document this.
+/**
+ * Returns a single skill by id.
+ * @param {Number} id Unique integer that identifies a skill.
+ * @param {Function} fn Callback
+ */
 var getSkillById = _getModelByIdGenerator('skill');
 
 module.exports = {
